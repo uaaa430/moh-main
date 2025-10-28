@@ -1,41 +1,88 @@
-# Prerequisites
-*.d
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <numeric> // std::accumulate(); 
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+using std::string;
+using std::vector;
+using std::cout;
+using std::cin;
+using std::endl;
+using std::left;
+using std::right;
+using std::setw;
+using std::setprecision;
 
-# Precompiled Headers
-*.gch
-*.pch
+class Person {
+    string name, surname;
+    vector <int> Homework; 
+    int exam;
+    double final_grade;
+public: 
+    Person() {
+        name = "Test";
+        surname = "SurTest";
+        Homework = {9,9,9,9,9,9,9,9,9};
+        exam = 10;
+        FinalAv();
+    };
+    void FinalAv() {
+        final_grade = std::accumulate(Homework.begin(), Homework.end(), 0.0) / Homework.size() * 0.4 + exam * 0.6;
+    };
+    void FinalMed() {
+        //final_grade = med * 0.4 + exam * 0.6;
+    };
+    Person(string A, string B, vector <int> C, int D) {
+        name = A;
+        surname = B;
+        Homework = C;
+        exam = D;
+        FinalAv();
+    };
+    ~Person() {
+        name.clear();
+        surname.clear();
+        Homework.clear();
+        exam = 0;
+        final_grade = 0;
+    }
+    void output() {
+        std::cout << "| " << setw(20)<<left<<name << " | " <<setw(20)<< surname << " | " <<setw(5)<<right<< final_grade << " |" << endl;
+    };
+};
 
-# Linker files
-*.ilk
+void FillGroup(vector<Person>& LocalGroup) {
+    int n;
+    cout << "How many Students You have to input: ";
+    cin >> n;
+    for (int a = 0; a < n; a++) {
+        string tname, tsurname;
+        cout << "Please input " << a + 1 << " Student name and surname:" << endl;
+        cin >> tname >> tsurname;
+        vector<int> thw; int tp;
+        for (int i = 0; i < 5; i++) {
+            cout << "Please iput " << a + 1 << " Student " << i + 1 << " Home work points from " << 5 << endl;
+            cin >> tp;
+            thw.push_back(tp);
+        }
+        cout << "Please input " << a + 1 << " Student final exam points:" << endl;
+        int texam;
+        cin >> texam;
 
-# Debugger Files
-*.pdb
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+        Person temp(tname, tsurname, thw, texam);
+        LocalGroup.push_back(temp);
+        thw.clear();
+    }
+}
 
-# Fortran module files
-*.mod
-*.smod
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
 
-# Executables
-*.exe
-*.out
-*.app
-
-# debug information files
-*.dwo
+int main()
+{
+    vector<Person> Group;
+    FillGroup(Group);
+    for (auto J : Group)
+        J.output();
+}
